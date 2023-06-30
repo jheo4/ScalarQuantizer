@@ -9,8 +9,8 @@
 #define LLOYD_H_
 #include <iostream>
 #include <math.h>
-#include "../FileIO/fileIO.h"
-#include "../global.h"
+#include "fileIO.h"
+#include "global.h"
 
 using namespace std;
 

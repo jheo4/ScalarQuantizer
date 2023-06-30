@@ -9,7 +9,7 @@
 #define FILEIO_H_
 #include <iostream>
 #include <fstream>
-#include "../global.h"
+#include "global.h"
 
 //functions related to writing
 void writeSingleCode(unsigned long code, char size);
@@ -21,7 +21,7 @@ void WriteBit(bool x);
 void writeFileByBytes(unsigned char data);
 
 //functions related to reading
-char* readFileByBytes(char filename[]);
+void readFileByBytes(char filename[], char* &memblock, int &fileSize);
 bool checkEOF();
 bool ReadBit();
 

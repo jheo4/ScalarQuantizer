@@ -25,43 +25,39 @@
 // - MATLAB files have been provided for plotting and comparing the quantized and
 // original file
 
-
 //============================================================================
 
 #include <iostream>
 #include <math.h>
-#include "FileIO/fileIO.h"
-#include "LloydMax/lloyd.h"
+#include "fileIO.h"
+#include "lloyd.h"
+#include <opencv2/opencv.hpp>
+
 using namespace std;
-char* prepareTrainingFile(char[], char[], char[]);
 
+int main()
+{
+	char filename1[] = "./resources/chem.256";
+	char filename2[] = "./resources/house.256";
+	char filename3[] = "./resources/moon.256";
 
-
-int main() {
-
-	char filename1[] = "resources/chem.256";
-	char filename2[] = "resources/house.256";
-	char filename3[] = "resources/moon.256";
-
-	//Prepare the training file
-	char *memblock = prepareTrainingFile(filename1,filename2,filename3);
-
-	//No of bits
+	// No of bits
 	int n = 3;
 
-//--------Train for the quantization levels------------//
-	train(memblock,n);
+	//--------Train for the quantization levels------------//
+	train(memblock, n);
 
-//------Test the file--------------------------------//
+	//------Test the file--------------------------------//
 	char testFile[] = "resources/moon.256";
 	memblock = readFileByBytes(testFile);
 	char outputFile[] = "quantizedOutput.dat";
-	//Prepare the output file
+	// Prepare the output file
 	writePrepare(outputFile);
-	//Get the quantized value of the file.
+	// Get the quantized value of the file.
 	unsigned char *output = test(memblock, FileSizeinBytes);
-	//write the data to the file
-	for(int i = 0; i < FileSizeinBytes; i++){
+	// write the data to the file
+	for (int i = 0; i < FileSizeinBytes; i++)
+	{
 		writeFileByBytes(output[i]);
 	}
 
@@ -69,38 +65,4 @@ int main() {
 
 	cout << "End of program";
 	return 0;
-}
-
-/**
- * Collecting the images and create a single training file
- *
- */
-char* prepareTrainingFile(char filename1[], char filename2[], char filename3[]){
-	int totFileSize1, totFileSize2, totFileSize3;
-
-		//Read the training image files
-		//Image 1
-		char *memblock = readFileByBytes(filename1);
-		totFileSize1 = FileSizeinBytes;
-
-		//Image 2
-		char *memblock2 = readFileByBytes(filename2);
-		totFileSize2 = FileSizeinBytes;
-
-		//Image 3
-		char *memblock3 = readFileByBytes(filename3);
-		totFileSize3 = FileSizeinBytes;
-
-		for(int i = 0; i < totFileSize2; i++){
-			memblock[i + totFileSize1] = memblock2[i];
-		}
-
-		int TwofileSize = totFileSize1 + totFileSize2;
-		for(int i = 0; i < totFileSize3; i++){
-			memblock[i + TwofileSize] = memblock3[i];
-		}
-
-		FileSizeinBytes = TwofileSize + totFileSize3;
-		return memblock;
-
 }
